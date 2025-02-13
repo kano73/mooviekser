@@ -13,7 +13,7 @@ import java.util.Objects;
 public class MyUser {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     @Size(min = 3, max = 20)
     @Column(name = "username", nullable = false, unique = true)
@@ -36,11 +36,11 @@ public class MyUser {
     @Column(name = "role", nullable = false)
     private RoleEnum role;
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

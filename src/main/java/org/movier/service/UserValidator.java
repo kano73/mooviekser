@@ -7,10 +7,10 @@ import org.movier.repository.MyUserRepository;
 import org.springframework.stereotype.Service;
 
 @Service
-public class ValidateUser {
+public class UserValidator {
     private final MyUserRepository myUserRepository;
 
-    public ValidateUser(MyUserRepository myUserRepository) {
+    public UserValidator(MyUserRepository myUserRepository) {
         this.myUserRepository = myUserRepository;
     }
 

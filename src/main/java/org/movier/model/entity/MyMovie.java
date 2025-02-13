@@ -1,47 +1,82 @@
 package org.movier.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 
-import java.time.Year;
+import java.time.LocalDate;
 import java.util.Objects;
+import java.util.Set;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name="my_movie")
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class MyMovie {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     @Column(name="icon_url")
-    private String icon_url;
+    private String poster_path;
 
     @Column(name="title", nullable = false)
     private String title;
 
-    @Column(name="rating")
-    private Float rating;
+    @Column(name="vote_average")
+    private Float vote_average;
 
-    @Column(name="watchedTimes", nullable = false)
-    private Long watchedTimes;
+    @Column(name="vote_count")
+    private Long vote_count;
 
-    @Column(name="year")
-    private Year year;
+    @Column(name="release_date")
+    private LocalDate release_date;
 
-    @Column(name="duration")
-    private Float duration;
+    @Column(name="overview",columnDefinition = "TEXT")
+    private String overview;
 
-    @Column(name="description")
-    private String description;
+    @ManyToMany
+    @JoinTable(
+            name = "movie_genre",
+            joinColumns = @JoinColumn(name = "id_movie"),
+            inverseJoinColumns = @JoinColumn(name = "id_genre"))
+    private Set<MyGenre> genres;
 
-    @Column(name="category", nullable = false)
-    private String category;
-
-    public String getIcon_url() {
-        return icon_url;
+    @JsonProperty("genre_ids")
+    public void getGenresFromIds(List<Long> genreIds){
+        this.genres = genreIds.stream().map(num->{
+            MyGenre genre = new MyGenre();
+            genre.setId(num);
+            return genre;
+        }).collect(Collectors.toSet());
     }
 
-    public void setIcon_url(String icon_url) {
-        this.icon_url = icon_url;
+    public void setVote_average(Float vote_average) {
+        this.vote_average = vote_average;
+    }
+
+    public Long getVote_count() {
+        return vote_count;
+    }
+
+    public void setVote_count(Long vote_count) {
+        this.vote_count = vote_count;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getPoster_path() {
+        return poster_path;
+    }
+
+    public void setPoster_path(String poster_path) {
+        this.poster_path = poster_path;
     }
 
     public String getTitle() {
@@ -52,75 +87,53 @@ public class MyMovie {
         this.title = title;
     }
 
-    public Float getRating() {
-        return rating;
+    public LocalDate getRelease_date() {
+        return release_date;
     }
 
-    public void setRating(Float rating) {
-        this.rating = rating;
+    public void setRelease_date(LocalDate release_date) {
+        this.release_date = release_date;
     }
 
-    public Long getWatchedTimes() {
-        return watchedTimes;
+    public String getOverview() {
+        return overview;
     }
 
-    public void setWatchedTimes(Long watchedTimes) {
-        this.watchedTimes = watchedTimes;
+    public void setOverview(String overview) {
+        this.overview = overview;
     }
 
-    public void setId(long id) {
-        this.id = id;
+    public Set<MyGenre> getGenres() {
+        return genres;
     }
 
-    public Year getYear() {
-        return year;
-    }
-
-    public void setYear(Year year) {
-        this.year = year;
-    }
-
-    public Float getDuration() {
-        return duration;
-    }
-
-    public void setDuration(Float duration) {
-        this.duration = duration;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public String getCategory() {
-        return category;
-    }
-
-    public void setCategory(String category) {
-        this.category = category;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Long getId() {
-        return id;
+    public void setGenres(Set<MyGenre> genres) {
+        this.genres = genres;
     }
 
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         MyMovie myMovie = (MyMovie) o;
-        return id == myMovie.id && Objects.equals(icon_url, myMovie.icon_url) && Objects.equals(title, myMovie.title);
+        return id == myMovie.id && Objects.equals(title, myMovie.title);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, icon_url, title);
+        return Objects.hash(id, title);
+    }
+
+    @Override
+    public String toString() {
+        return "MyMovie{" +
+                "id=" + id +
+                ", poster_path='" + poster_path + '\'' +
+                ", title='" + title + '\'' +
+                ", vote_average=" + vote_average +
+                ", vote_count=" + vote_count +
+                ", release_date=" + release_date +
+                ", overview='" + overview + '\'' +
+                ", genres=" + genres +
+                '}';
     }
 }

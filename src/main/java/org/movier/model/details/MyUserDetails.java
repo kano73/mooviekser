@@ -29,4 +29,8 @@ public record MyUserDetails(MyUser myUser) implements UserDetails {
     public boolean isEnabled() {
         return myUser.getEmailActivated();
     }
+
+    public MyUser getMyUser() {
+        return myUser;
+    }
 }
