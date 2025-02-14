@@ -27,7 +27,7 @@ public class MyMovie {
     private Float vote_average;
 
     @Column(name="vote_count")
-    private Long vote_count;
+    private Integer vote_count;
 
     @Column(name="release_date")
     private LocalDate release_date;
@@ -51,15 +51,19 @@ public class MyMovie {
         }).collect(Collectors.toSet());
     }
 
+    public Float getVote_average() {
+        return vote_average;
+    }
+
     public void setVote_average(Float vote_average) {
         this.vote_average = vote_average;
     }
 
-    public Long getVote_count() {
+    public Integer getVote_count() {
         return vote_count;
     }
 
-    public void setVote_count(Long vote_count) {
+    public void setVote_count(Integer vote_count) {
         this.vote_count = vote_count;
     }
 

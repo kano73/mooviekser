@@ -38,8 +38,8 @@ public class AppConfig {
         factoryBean.setPersistenceUnitName("myJpaUnit");
 
         HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
-        vendorAdapter.setDatabasePlatform("org.hibernate.dialect.PostgreSQLDialect");
-        vendorAdapter.setGenerateDdl(true);  // auto creating tables
+//        vendorAdapter.setDatabasePlatform("org.hibernate.dialect.PostgreSQLDialect");
+        vendorAdapter.setGenerateDdl(true);
 
         factoryBean.setJpaVendorAdapter(vendorAdapter);
 

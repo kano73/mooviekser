@@ -46,11 +46,6 @@ public class WatchedService {
         return watchedRepository.countFavoriteByMovie(movie);
     }
 
-    public Long countWatchedFourUser() {
-        MyUser user = auth.getCurrentUserAuthenticated();
-        return watchedRepository.countFavoriteByUser(user);
-    }
-
     public boolean remove(@Valid WatchedDTO dto) {
         MyUser user = auth.getCurrentUserAuthenticated();
         if(!myMovieRepository.existsById(dto.getMovieId())) {

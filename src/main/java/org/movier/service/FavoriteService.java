@@ -9,9 +9,11 @@ import org.movier.model.entity.MyMovie;
 import org.movier.model.entity.MyUser;
 import org.movier.repository.FavoriteRepository;
 import org.movier.repository.MyMovieRepository;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class FavoriteService {
@@ -46,8 +48,12 @@ public class FavoriteService {
         return true;
     }
 
-    public List<Favorite> getAllFavoritesForUser() {
+    public List<MyMovie> getAllFavoriteMoviesForUser(int page ) {
         MyUser user = auth.getCurrentUserAuthenticated();
-        return favoriteRepository.findAllByUser(user);
+        if (page<1){
+            page = 1;
+        }
+        return favoriteRepository.findAllByUser(user, PageRequest.of(page,25)).stream()
+                .map(Favorite::getMovie).collect(Collectors.toList());
     }
 }

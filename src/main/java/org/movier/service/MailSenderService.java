@@ -15,18 +15,11 @@ public class MailSenderService {
     }
 
     public void sendEmail(String to, String subject, String text) {
-
-        System.out.println("Sending email to " + to
-        + " with subject " + subject
-        + " and text " + text
-        +" and from " + from);
-
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(to);
         message.setSubject(subject);
         message.setText(text);
         message.setFrom(from);
         mailSender.send(message);
-
     }
 }

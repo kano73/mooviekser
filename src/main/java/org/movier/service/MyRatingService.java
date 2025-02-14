@@ -11,6 +11,9 @@ import org.movier.repository.MyMovieRepository;
 import org.movier.repository.MyRatingRepository;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import java.util.List;
+
 @Service
 public class MyRatingService {
 
@@ -42,5 +45,34 @@ public class MyRatingService {
         myRatingRepository.save(rating);
 
         return true;
+    }
+
+    public MyMovie adjustRatingParams(MyMovie movie) {
+        List<Float> values = myRatingRepository.findAllRatingsByMovieId(movie.getId());
+
+        float numOfValues = (float) values.size();
+        float numOfVotes = (float) movie.getVote_count();
+
+        Float finalNumOfValues = numOfValues;
+        Float avgValues = values.stream().reduce(Float::sum)
+                .map(num->num/ finalNumOfValues).orElse(0.0f);
+
+        Float avgVotes = movie.getVote_average();
+
+        movie.setVote_count(movie.getVote_count() + (int) numOfValues);
+
+        if(numOfValues>numOfVotes){
+            numOfValues = numOfValues/numOfVotes;
+            numOfVotes = 1;
+
+        }else if(numOfValues<numOfVotes){
+            numOfVotes = numOfVotes/numOfValues;
+            numOfValues = 1;
+        }else {
+            movie.setVote_average((avgValues+avgVotes)/2);
+            return movie;
+        }
+        movie.setVote_average((numOfValues*avgValues+numOfVotes*avgVotes)/numOfVotes+numOfValues);
+        return movie;
     }
 }
