@@ -5,7 +5,6 @@ import org.movier.exceptions.MyUserNotFoundException;
 import org.movier.model.entity.AdminInvitation;
 import org.movier.model.entity.EmailValidation;
 import org.movier.model.entity.MyUser;
-import org.movier.repository.AdminInvitationRepository;
 import org.movier.repository.EmailValidationRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
