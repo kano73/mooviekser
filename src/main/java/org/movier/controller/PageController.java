@@ -50,4 +50,9 @@ public class PageController {
         pageBuilderService.buildMovieById(model,id);
         return "movie";
     }
+
+    @GetMapping("/watched")
+    public String getWatched(){
+        return "watched";
+    }
 }

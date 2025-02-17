@@ -22,10 +22,10 @@ public class WatchedController {
 
     @PostMapping("/watched")
     public String addToWatched(@Valid @RequestParam("movieId") Long movieId) {
-        return watchedService.saveOrDelete(movieId) ? "susses": "fail";
+        return watchedService.saveOrDelete(movieId) ? "success": "fail";
     }
 
-    @GetMapping("/watched")
+    @GetMapping("/getWatched")
     public List<MyMovieSimpleInfoDTO> getWatchedMovies() {
         return myMovieService.findAllWatchedMovies();
     }

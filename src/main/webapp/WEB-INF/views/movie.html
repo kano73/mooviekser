@@ -30,7 +30,7 @@
     <form id="ratingForm">
         <p>Rate the film:</p>
         <label for="rating">Rate:</label>
-        <input type="number" id="rating" name="rating" step="0.1" min="0.1" max="10.0" required>
+        <input th:value="${ratingValue}" type="number" id="rating" name="rating" step="0.1" min="0.1" max="10.0" required>
 
         <button type="submit">Send</button>
     </form>
@@ -44,4 +44,13 @@
 </div>
 
 </body>
+    <style th:inline="css">
+        .btnDltComment {
+            display: /*[[${#authorization.expression('hasRole(''ROLE_ADMIN'')')} ? 'block' : 'none']]*/ none;
+        }
+    </style>
+
+    <script th:inline="javascript">
+        const usersId = /*[[${usersId}]]*/ null;
+    </script>
 </html>

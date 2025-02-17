@@ -58,8 +58,6 @@ document.addEventListener("DOMContentLoaded", function () {
     function sendRequest(page) {
         let filters = getFormData();
 
-        console.log(filters);
-
         let url = filters && filters !== "{}" ? "/movies" : "/allMovies";
 
         url += `?page=${page}`;
@@ -108,6 +106,7 @@ document.addEventListener("DOMContentLoaded", function () {
             resultsContainer.appendChild(movieDiv);
         });
     }
+
 
     btnSubmit.addEventListener("click", function (event) {
         event.preventDefault();

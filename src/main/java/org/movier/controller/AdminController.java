@@ -6,6 +6,7 @@ import org.movier.exceptions.UserDontHaveRightsForActionException;
 import org.movier.model.entity.MyUser;
 import org.movier.model.enums.RoleEnum;
 import org.movier.service.AdminInvitationService;
+import org.movier.service.MyCommentService;
 import org.movier.service.MyUserService;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,7 +23,7 @@ public class AdminController {
         this.adminInvitationService = adminInvitationService;
     }
 
-    public void isUserIsAdmin() {
+    private void isUserIsAdmin() {
         MyUser user = authenticatedMyUserService.getCurrentUserAuthenticated();
         if (user.getRole()!= RoleEnum.ADMIN){
             throw new UserDontHaveRightsForActionException("You are not allowed to do this action");
@@ -51,6 +52,6 @@ public class AdminController {
     @GetMapping("/accept")
     public String verifyEmail(@RequestParam("token") String token) {
         adminInvitationService.acceptInvitation(token);
-        return "susses";
+        return "success";
     }
 }

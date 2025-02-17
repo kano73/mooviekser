@@ -52,16 +52,16 @@ public class MyCommentService {
         return true;
     }
 
-    public boolean deleteComment(@Valid MyCommentDeleteDTO dto) {
+    public boolean deleteComment(@Valid Long commentId) {
         MyUser user = auth.getCurrentUserAuthenticated();
-        MyComment comment = myCommentRepository.findById(dto.getCommentId())
-                .orElseThrow(()->new CommentNotFoundException("No comment found with id:" + dto.getCommentId()));
+        MyComment comment = myCommentRepository.findById(commentId)
+                .orElseThrow(()->new CommentNotFoundException("No comment found with id:" + commentId));
 
         if(comment.getAuthor().equals(user) || user.getRole() == RoleEnum.ADMIN){
             myCommentRepository.deleteById(comment.getId());
             return true;
         } else{
-            throw new UserDontHaveRightsForActionException("You dont have right to delete this comment");
+            throw new UserDontHaveRightsForActionException("You dont have rights to delete this comment");
         }
     }
 

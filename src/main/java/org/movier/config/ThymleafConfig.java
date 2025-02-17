@@ -59,6 +59,7 @@ public class ThymleafConfig implements WebMvcConfigurer {
         registry.addViewController("/home").setViewName("home");
         registry.addViewController("/admin_panel").setViewName("admin_panel");
         registry.addViewController("/error").setViewName("error");
+        registry.addViewController("/watched").setViewName("watched");
     }
 
 }

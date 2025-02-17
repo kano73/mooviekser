@@ -54,11 +54,9 @@ public class WatchedService {
         return watchedRepository.countFavoriteByMovie(movie);
     }
 
-    public Boolean isUserWatchedThisMovie(@NotNull Long movieId) {
+    public Boolean isUserWatchedThisMovie(@NotNull Long movieId, MyUser user) {
         MyMovie movie = myMovieRepository.findById(movieId)
                 .orElseThrow(()->new MovieDoesNotExistsException("Movie does not exist with id " + movieId));
-
-        MyUser user = auth.getCurrentUserAuthenticated();
 
         return watchedRepository.findByUserAndMovie_Id(user, movieId).isPresent();
     }

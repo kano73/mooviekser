@@ -1,8 +1,12 @@
 package org.movier.service;
 
 import jakarta.validation.constraints.NotNull;
+import org.movier.config.security.AuthenticatedMyUserService;
+import org.movier.exceptions.UserNotFoundException;
 import org.movier.model.entity.MyGenre;
 import org.movier.model.entity.MyMovie;
+import org.movier.model.entity.MyUser;
+import org.movier.model.enums.RoleEnum;
 import org.movier.repository.MyGenreRepository;
 import org.movier.repository.WatchedRepository;
 import org.springframework.stereotype.Service;
@@ -16,12 +20,16 @@ public class PageBuilderService {
     private final MyMovieService myMovieService;
     private final WatchedRepository watchedRepository;
     private final WatchedService watchedService;
+    private final AuthenticatedMyUserService authenticatedMyUserService;
+    private final MyRatingService myRatingService;
 
-    public PageBuilderService(MyGenreRepository myGenreRepository, MyMovieService myMovieService, WatchedRepository watchedRepository, WatchedService watchedService) {
+    public PageBuilderService(MyGenreRepository myGenreRepository, MyMovieService myMovieService, WatchedRepository watchedRepository, WatchedService watchedService, AuthenticatedMyUserService authenticatedMyUserService, MyRatingService myRatingService) {
         this.myGenreRepository = myGenreRepository;
         this.myMovieService = myMovieService;
         this.watchedRepository = watchedRepository;
         this.watchedService = watchedService;
+        this.authenticatedMyUserService = authenticatedMyUserService;
+        this.myRatingService = myRatingService;
     }
 
     public void buildMovies(Model model) {
@@ -31,12 +39,16 @@ public class PageBuilderService {
 
     public void buildMovieById(Model model, @NotNull Long id) {
         MyMovie movie = myMovieService.findById(id);
+        boolean isWatched = false;
         try{
-            Boolean isWatched = watchedService.isUserWatchedThisMovie(id);
-            model.addAttribute("isWatched", isWatched);
-        }catch (Exception e){
-            model.addAttribute("isWatched", false);
-        }
+            MyUser user = authenticatedMyUserService.getCurrentUserAuthenticated();
+            isWatched = watchedService.isUserWatchedThisMovie(id, user);
+            Float ratingValue = myRatingService.getValueByUser_IdAndMovie_Id(user.getId(),movie.getId());
+
+            model.addAttribute("usersId", user.getId());
+            model.addAttribute("ratingValue", ratingValue);
+        }catch (UserNotFoundException _){}
+        model.addAttribute("isWatched", isWatched);
         model.addAttribute("movie", movie);
     }
 }

@@ -28,7 +28,7 @@ public class MyUserController {
 
     @GetMapping("/verify")
     public String verifyEmail(@RequestParam("token") String token) {
-        return myUserService.verifyEmail(token) ? "success" : "fail";
+        return myUserService.verifyEmail(token) ? "redirect:/login?" : "fail";
     }
 
     @PostMapping("/change_profile")

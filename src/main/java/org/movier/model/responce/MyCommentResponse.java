@@ -4,7 +4,7 @@ package org.movier.model.responce;
 import java.time.LocalDateTime;
 
 public class MyCommentResponse {
-
+    private Long id;
     private String text;
     private String authorName;
     private Long authorId;
@@ -13,11 +13,20 @@ public class MyCommentResponse {
     public MyCommentResponse() {
     }
 
-    public MyCommentResponse(String text, String authorName, Long authorId, LocalDateTime date) {
+    public MyCommentResponse(Long id, String text, String authorName, Long authorId, LocalDateTime date) {
+        this.id = id;
         this.text = text;
         this.authorName = authorName;
         this.authorId = authorId;
         this.date = date;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getText() {

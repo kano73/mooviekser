@@ -22,12 +22,12 @@ public class MyCommentController {
 
     @PostMapping("/comment")
     public String addComment(@Valid @RequestBody MyCommentDTO dto) {
-        return myCommentService.save(dto) ? "susses" : "fail";
+        return myCommentService.save(dto) ? "success" : "fail";
     }
 
-    @DeleteMapping
-    public String deleteComment(@Valid @RequestBody MyCommentDeleteDTO dto) {
-        return myCommentService.deleteComment(dto) ? "susses" : "fail";
+    @DeleteMapping("/comment")
+    public String deleteComment(@RequestParam("commentId") Long id) {
+        return myCommentService.deleteComment(id) ? "success":"fail";
     }
 
     @GetMapping("/comment")

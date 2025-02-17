@@ -63,4 +63,9 @@ public class MyRatingService {
     private void adjustRatingUpdate(MyMovie movie, MyRatingDTO dto, Float oldRating) {
         movie.setVoteAverage( ( ( movie.getVoteAverage()* movie.getVoteCount() ) - oldRating + dto.getRating() )/ movie.getVoteCount());
     }
+
+    public Float getValueByUser_IdAndMovie_Id(Long userId, Long movieId) {
+        return myRatingRepository.findFirstValueByAuthor_IdAndMovie_Id(userId, movieId)
+                .orElse(null);
+    }
 }

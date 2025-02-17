@@ -18,7 +18,7 @@ public interface MyCommentRepository extends CrudRepository<MyComment, Long> {
     @Override
     <S extends MyComment> S save(S entity);
 
-    @Query("SELECT new  org.movier.model.responce.MyCommentResponse(c.text, u.username, u.id, c.timestamp) " +
+    @Query("SELECT new  org.movier.model.responce.MyCommentResponse(c.id, c.text, u.username, u.id, c.timestamp) " +
             "FROM MyComment c " +
             "JOIN c.author u " +
             "WHERE c.movie.id = :id")

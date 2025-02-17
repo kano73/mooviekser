@@ -25,32 +25,28 @@ button:hover {
     background-color: #555;
 }
 
-/*img{*/
-/*    max-width: 15%;*/
-/*}*/
-
 .movies {
-    width: 70%;  /* 70% ширины экрана */
-    margin: 0 auto;  /* Центрирование по горизонтали */
+    width: 70%;
+    margin: 0 auto;
     display: flex;
-    flex-wrap: wrap; /* Перенос на новую строку, если места не хватает */
-    justify-content: space-between; /* Равномерное распределение фильмов */
-    gap: 20px; /* Отступы между фильмами */
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 20px;
 }
 
 .movie-div {
-    width: calc(23.33% - 20px); /* 3 фильма в ряд, учитывая отступы */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Легкая тень */
-    border-radius: 10px; /* Скругление углов */
+    width: calc(23.33% - 20px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
     overflow: hidden;
-    text-align: center; /* Центрируем текст */
+    text-align: center;
     background: #6c7160;
     padding: 10px;
 }
 
 .movie-div img {
-    width: 100%; /* Картинка занимает всю ширину */
-    border-radius: 10px 10px 0 0; /* Скругление только верхних углов */
+    width: 100%;
+    border-radius: 10px 10px 0 0;
 }
 
 .movie-div p {
@@ -62,4 +58,25 @@ button:hover {
 select#genres option.selected {
     background-color: blue;
     color: white;
+}
+
+.nav__links {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+
+    list-style: none;
+
+    overflow: auto;
+}
+
+button.btnDltComment.usersComment {
+    display: block;
+}
+.btnDltComment {
+    scale: 25%;
+}
+
+img.poster{
+    max-width: 15%;
 }

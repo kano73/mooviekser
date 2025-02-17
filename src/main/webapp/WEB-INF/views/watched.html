@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity" lang="en">
+
+<head>
+    <link rel="stylesheet" th:href="@{/static/css/style.css}">
+    <title>Search for movies</title>
+    <script th:src="@{/static/js/watched.js}" defer></script>
+</head>
+<body>
+    <div th:replace="~{fragments/header :: div}"></div>
+    <div><span sec:authentication="name"></span>, watched movies</div>
+    <div class="movies"></div>
+</body>
+</html>
