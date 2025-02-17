@@ -3,16 +3,14 @@ package org.movier.service;
 import jakarta.validation.Valid;
 import org.movier.config.security.AuthenticatedMyUserService;
 import org.movier.exceptions.MovieDoesNotExistsException;
-import org.movier.model.dto.MyRateDTO;
+import org.movier.model.dto.MyRatingDTO;
 import org.movier.model.entity.MyMovie;
 import org.movier.model.entity.MyRating;
 import org.movier.model.entity.MyUser;
 import org.movier.repository.MyMovieRepository;
 import org.movier.repository.MyRatingRepository;
 import org.springframework.stereotype.Service;
-
-import javax.persistence.criteria.CriteriaBuilder;
-import java.util.List;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class MyRatingService {
@@ -27,52 +25,42 @@ public class MyRatingService {
         this.myMovieRepository = myMovieRepository;
     }
 
-    public boolean save(@Valid MyRateDTO dto) {
+    @Transactional
+    public boolean save(@Valid MyRatingDTO rateDto) {
         MyUser user = auth.getCurrentUserAuthenticated();
 
-        if(!myMovieRepository.existsById(dto.getMovieId())){
-            throw new MovieDoesNotExistsException("no movie found with id: "+dto.getMovieId());
-        }
+        MyMovie movie = myMovieRepository.findById(rateDto.getMovieId())
+                .orElseThrow(()->new MovieDoesNotExistsException("no movie found with id: "+rateDto.getMovieId()));
 
-        MyMovie movie = new MyMovie();
-        movie.setId(dto.getMovieId());
+        Float oldRating = myRatingRepository.findFirstValueByAuthor_IdAndMovie_Id(user.getId(), movie.getId())
+                .orElse(null);
+
+        if(oldRating != null) {
+            System.out.println("deleting");
+            myRatingRepository.deleteByAuthor_IdAndMovie_Id(user.getId(), movie.getId());
+            adjustRatingUpdate(movie, rateDto, oldRating);
+        }else{
+            adjustRatingAdd(movie, rateDto);
+        }
 
         MyRating rating = new MyRating();
         rating.setAuthor(user);
         rating.setMovie(movie);
-        rating.setValue(dto.getRate());
+        rating.setValue(rateDto.getRating());
 
+        myMovieRepository.updateVoteById(movie.getVoteCount(), movie.getVoteAverage(), movie.getId());
         myRatingRepository.save(rating);
 
         return true;
     }
 
-    public MyMovie adjustRatingParams(MyMovie movie) {
-        List<Float> values = myRatingRepository.findAllRatingsByMovieId(movie.getId());
+    private void adjustRatingAdd(MyMovie movie, MyRatingDTO dto) {
+        movie.setVoteAverage( ( (movie.getVoteAverage()* movie.getVoteCount() ) + dto.getRating() )/
+                                                (movie.getVoteCount()+1));
+        movie.setVoteCount(movie.getVoteCount()+1);
+    }
 
-        float numOfValues = (float) values.size();
-        float numOfVotes = (float) movie.getVote_count();
-
-        Float finalNumOfValues = numOfValues;
-        Float avgValues = values.stream().reduce(Float::sum)
-                .map(num->num/ finalNumOfValues).orElse(0.0f);
-
-        Float avgVotes = movie.getVote_average();
-
-        movie.setVote_count(movie.getVote_count() + (int) numOfValues);
-
-        if(numOfValues>numOfVotes){
-            numOfValues = numOfValues/numOfVotes;
-            numOfVotes = 1;
-
-        }else if(numOfValues<numOfVotes){
-            numOfVotes = numOfVotes/numOfValues;
-            numOfValues = 1;
-        }else {
-            movie.setVote_average((avgValues+avgVotes)/2);
-            return movie;
-        }
-        movie.setVote_average((numOfValues*avgValues+numOfVotes*avgVotes)/numOfVotes+numOfValues);
-        return movie;
+    private void adjustRatingUpdate(MyMovie movie, MyRatingDTO dto, Float oldRating) {
+        movie.setVoteAverage( ( ( movie.getVoteAverage()* movie.getVoteCount() ) - oldRating + dto.getRating() )/ movie.getVoteCount());
     }
 }

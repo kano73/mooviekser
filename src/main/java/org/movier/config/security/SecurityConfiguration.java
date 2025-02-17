@@ -1,5 +1,6 @@
 package org.movier.config.security;
 
+import org.movier.repository.BannedRepository;
 import org.movier.repository.MyUserRepository;
 import org.movier.service.MyUserDetailsService;
 import org.springframework.context.annotation.Bean;
@@ -30,8 +31,10 @@ public class SecurityConfiguration {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/login","/register","/static/js/**", "/verify").permitAll()
+                        .requestMatchers("/login","/register","/allMovies","/search","/movies", "/movie",
+                                "/static/**", "/verify", "/fragments/**", "/comment", "/error").permitAll()
                         .requestMatchers(HttpMethod.POST, "/register").permitAll()
+                        .requestMatchers("/admin_panel","/addAdmin","/banUser","/unbanUser").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .formLogin(login -> login
@@ -49,16 +52,16 @@ public class SecurityConfiguration {
     }
 
     @Bean
-    public AuthenticationProvider authenticationProvider() {
+    public AuthenticationProvider authenticationProvider(BannedRepository bannedRepository) {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-        authProvider.setUserDetailsService(userDetailsService());
+        authProvider.setUserDetailsService(userDetailsService(bannedRepository));
         authProvider.setPasswordEncoder(passwordEncoder());
         return authProvider;
     }
 
     @Bean
-    public UserDetailsService userDetailsService() {
-        return new MyUserDetailsService(myUserRepository);
+    public UserDetailsService userDetailsService(BannedRepository bannedRepository) {
+        return new MyUserDetailsService(myUserRepository, bannedRepository);
     }
 
     @Bean
@@ -70,5 +73,4 @@ public class SecurityConfiguration {
     public CustomAuthenticationFailureHandler customAuthenticationFailureHandler() {
         return new CustomAuthenticationFailureHandler();
     }
-
 }

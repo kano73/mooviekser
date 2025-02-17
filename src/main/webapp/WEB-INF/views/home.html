@@ -3,13 +3,17 @@
       xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity" lang="en">
 
 <head>
+    <link rel="stylesheet" th:href="@{/static/css/style.css}">
     <title>Home</title>
 </head>
 <body>
+<div th:replace="~{fragments/header :: div}"></div>
 <h2>Welcome, <span sec:authentication="name"></span>!</h2>
-<div th:replace="~{/static/fragments/header :: div}"></div>
 
 <div sec:authorize="hasRole('ROLE_ADMIN')">You are an admin.</div>
+<div sec:authorize="hasRole('ROLE_ADMIN')">
+    <a href="/admin_panel">admin panel</a>
+</div>
 
 </body>
 </html>

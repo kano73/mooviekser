@@ -1,15 +1,17 @@
 package org.movier.service;
 
-import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import org.movier.config.security.AuthenticatedMyUserService;
 import org.movier.exceptions.MovieDoesNotExistsException;
-import org.movier.model.dto.WatchedDTO;
 import org.movier.model.entity.MyMovie;
 import org.movier.model.entity.MyUser;
 import org.movier.model.entity.Watched;
 import org.movier.repository.MyMovieRepository;
 import org.movier.repository.WatchedRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
 
 @Service
 public class WatchedService {
@@ -24,19 +26,25 @@ public class WatchedService {
         this.myMovieRepository = myMovieRepository;
     }
 
-    public boolean save(@Valid WatchedDTO dto) {
+    @Transactional
+    public boolean saveOrDelete(Long movieId) {
         MyUser user = auth.getCurrentUserAuthenticated();
-        if(!myMovieRepository.existsById(dto.getMovieId())) {
-            throw new MovieDoesNotExistsException("Movie does not exist with id " + dto.getMovieId());
+        if(!myMovieRepository.existsById(movieId)) {
+            throw new MovieDoesNotExistsException("Movie does not exist with id " + movieId);
         }
-        MyMovie movie = new MyMovie();
-        movie.setId(dto.getMovieId());
+        Optional<Watched> watchedOpt = watchedRepository.findByUserAndMovie_Id(user, movieId);
+        if(watchedOpt.isPresent()) {
+            watchedRepository.deleteByUserAndMovie_Id(user, movieId);
+        }else {
+            MyMovie movie = new MyMovie();
+            movie.setId(movieId);
 
-        Watched watched = new Watched();
-        watched.setUser(user);
-        watched.setMovie(movie);
+            Watched watched = new Watched();
+            watched.setUser(user);
+            watched.setMovie(movie);
 
-        watchedRepository.save(watched);
+            watchedRepository.save(watched);
+        }
         return true;
     }
 
@@ -46,15 +54,12 @@ public class WatchedService {
         return watchedRepository.countFavoriteByMovie(movie);
     }
 
-    public boolean remove(@Valid WatchedDTO dto) {
-        MyUser user = auth.getCurrentUserAuthenticated();
-        if(!myMovieRepository.existsById(dto.getMovieId())) {
-            throw new MovieDoesNotExistsException("Movie does not exist with id " + dto.getMovieId());
-        }
-        MyMovie movie = new MyMovie();
-        movie.setId(dto.getMovieId());
+    public Boolean isUserWatchedThisMovie(@NotNull Long movieId) {
+        MyMovie movie = myMovieRepository.findById(movieId)
+                .orElseThrow(()->new MovieDoesNotExistsException("Movie does not exist with id " + movieId));
 
-        watchedRepository.deleteByUserAndMovie(user, movie);
-        return true;
+        MyUser user = auth.getCurrentUserAuthenticated();
+
+        return watchedRepository.findByUserAndMovie_Id(user, movieId).isPresent();
     }
 }

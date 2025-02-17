@@ -1,5 +1,6 @@
 package org.movier.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
@@ -22,7 +23,8 @@ public class MyComment {
     @JoinColumn(name = "user_id", nullable = false)
     private MyUser author;
 
-    @ManyToOne
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "movie_id", nullable = false)
     private MyMovie movie;
 
@@ -70,7 +72,7 @@ public class MyComment {
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         MyComment myComment = (MyComment) o;
-        return id == myComment.id;
+        return Objects.equals(id, myComment.id);
     }
 
     @Override

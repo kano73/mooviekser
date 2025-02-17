@@ -1,5 +1,6 @@
 package org.movier.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
@@ -17,8 +18,9 @@ public class MyGenre {
     @Column(name = "name")
     private String name;
 
+    @JsonIgnore
     @Column(name="movie_id")
-    @ManyToMany(mappedBy = "genres")
+    @ManyToMany(mappedBy = "genres" ,fetch = FetchType.LAZY)
     private Set<MyMovie> movies;
 
     public Long getId() {

@@ -1,0 +1,65 @@
+* {
+    background-color: #000;
+    color: #FFD700; /* Золотисто-жёлтый */
+    font-family: Arial, sans-serif;
+}
+
+a {
+    color: #FFCC00;
+    text-decoration: none;
+}
+
+a:hover {
+    color: #FFA500;
+}
+
+button {
+    background-color: #333;
+    color: #FFD700;
+    border: 1px solid #FFD700;
+    padding: 10px 15px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #555;
+}
+
+/*img{*/
+/*    max-width: 15%;*/
+/*}*/
+
+.movies {
+    width: 70%;  /* 70% ширины экрана */
+    margin: 0 auto;  /* Центрирование по горизонтали */
+    display: flex;
+    flex-wrap: wrap; /* Перенос на новую строку, если места не хватает */
+    justify-content: space-between; /* Равномерное распределение фильмов */
+    gap: 20px; /* Отступы между фильмами */
+}
+
+.movie-div {
+    width: calc(23.33% - 20px); /* 3 фильма в ряд, учитывая отступы */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Легкая тень */
+    border-radius: 10px; /* Скругление углов */
+    overflow: hidden;
+    text-align: center; /* Центрируем текст */
+    background: #6c7160;
+    padding: 10px;
+}
+
+.movie-div img {
+    width: 100%; /* Картинка занимает всю ширину */
+    border-radius: 10px 10px 0 0; /* Скругление только верхних углов */
+}
+
+.movie-div p {
+    margin: 5px 0;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+select#genres option.selected {
+    background-color: blue;
+    color: white;
+}

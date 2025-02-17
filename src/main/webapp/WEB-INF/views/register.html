@@ -4,14 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<!--    <link rel="stylesheet" th:href="@{/css/styles_base.css}">-->
+    <link rel="stylesheet" th:href="@{/static/css/style.css}">
     <script th:src="@{/static/js/register.js}" defer></script>
     <title>User Registration</title>
 </head>
 <body>
+<div th:replace="~{fragments/header :: div}"></div>
 
 <div class="registration-container">
-    <div th:replace="~{/static/fragments/header :: div}"></div>
 
     <h1>Register</h1>
     <p>Already have an account? <a href="/login">Login here</a></p>
@@ -24,7 +24,7 @@
 
         <p>Please be note that You will have to confirm this email</p>
         <label for="email">Email:</label>
-        <input type="email" id="email" name="email" placeholder="Enter email" required th:value="${email}">
+        <input type="email" id="email" name="email" placeholder="Enter email" required>
         <br>
 
         <label for="password">Password:</label>

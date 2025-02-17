@@ -1,3 +1,5 @@
+"use strict";
+
 document.getElementById('registerForm').addEventListener('submit', function(event) {
     event.preventDefault();
 
@@ -17,8 +19,6 @@ document.getElementById('registerForm').addEventListener('submit', function(even
         email:email
     };
 
-    console.log("request data: ", requestData);
-
     const submitButton = document.getElementById('btnSubmit');
     submitButton.disabled = true;
 
@@ -31,7 +31,6 @@ document.getElementById('registerForm').addEventListener('submit', function(even
     })
         .then(response => response.text())
         .then(data => {
-            console.log('Success:', data);
             alert(data);
         })
         .catch((error) => {

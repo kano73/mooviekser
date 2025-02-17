@@ -52,8 +52,13 @@ public class ThymleafConfig implements WebMvcConfigurer {
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
         registry.addViewController("/login").setViewName("login");
-        registry.addViewController("/home").setViewName("home");
         registry.addViewController("/register").setViewName("register");
+        registry.addViewController("/change_profile").setViewName("change_profile");
+        registry.addViewController("/search").setViewName("search");
+        registry.addViewController("/profile").setViewName("profile");
+        registry.addViewController("/home").setViewName("home");
+        registry.addViewController("/admin_panel").setViewName("admin_panel");
+        registry.addViewController("/error").setViewName("error");
     }
 
 }

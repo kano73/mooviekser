@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity" lang="en">
+
+<head>
+    <link rel="stylesheet" th:href="@{/static/css/style.css}">
+    <title>Change profile</title>
+    <script th:src="@{/static/js/change_profile.js}" defer></script>
+</head>
+<body>
+<div th:replace="~{fragments/header :: div}"></div>
+<form id="changeInfoForm">
+    <label for="email">Email: </label>
+    <input id="email" type="text" th:value="${#authentication.principal.email}" />
+    <br>
+
+    <label for="username">Username: </label>
+    <input id="username" type="text" th:value="${#authentication.name}" />
+    <br>
+
+    <label for="password">New password: </label>
+    <input id="password" type="password" />
+    <br>
+
+    <label for="confirmPassword">Confirm new password: </label>
+    <input id="confirmPassword" type="password" />
+    <br>
+
+    <label for="oldPassword">Old password: </label>
+    <input id="oldPassword" type="password" />
+
+    <button id="btnSubmit" type="submit">Save</button>
+</form>
+
+<div sec:authorize="hasRole('ROLE_ADMIN')">You are an admin.</div>
+
+</body>
+</html>

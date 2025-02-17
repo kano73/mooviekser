@@ -10,13 +10,14 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface EmailValidationRepository extends JpaRepository<EmailValidation, Integer> {
 
     <S extends EmailValidation> S save(S entity);
 
-    List<EmailValidation> findByToken(String token);
+    Optional<EmailValidation> findByToken(String token);
 
     List<EmailValidation> findByUser(MyUser user);
 

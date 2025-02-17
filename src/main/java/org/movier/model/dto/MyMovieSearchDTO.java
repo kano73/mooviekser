@@ -1,17 +1,13 @@
 package org.movier.model.dto;
 
-import org.movier.model.entity.MyGenre;
-import org.springframework.data.domain.Pageable;
-
 import java.time.LocalDate;
-import java.util.Set;
+import java.util.List;
 
 public class MyMovieSearchDTO {
     private String title;
     private LocalDate from;
     private LocalDate to;
-    private Set<MyGenre> genres;
-    private Pageable pageable;
+    private List<Long> genres;
 
     public String getTitle() {
         return title;
@@ -37,19 +33,22 @@ public class MyMovieSearchDTO {
         this.to = to;
     }
 
-    public Set<MyGenre> getGenres() {
+    public List<Long> getGenres() {
         return genres;
     }
 
-    public void setGenres(Set<MyGenre> genres) {
+    public void setGenres(List<Long> genres) {
         this.genres = genres;
     }
 
-    public Pageable getPageable() {
-        return pageable;
-    }
 
-    public void setPageable(Pageable pageable) {
-        this.pageable = pageable;
+    @Override
+    public String toString() {
+        return "MyMovieSearchDTO{" +
+                "title='" + title + '\'' +
+                ", from=" + from +
+                ", to=" + to +
+                ", genres=" + genres +
+                '}';
     }
 }

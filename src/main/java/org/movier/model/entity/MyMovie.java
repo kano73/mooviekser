@@ -1,5 +1,7 @@
 package org.movier.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
@@ -14,28 +16,37 @@ import java.util.stream.Collectors;
 @Table(name="my_movie")
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class MyMovie {
+
     @Id
+    @JsonProperty("id")
     private Long id;
 
+    @JsonProperty("poster_path")
     @Column(name="icon_url")
-    private String poster_path;
+    private String posterPath;
 
+    @JsonProperty("title")
     @Column(name="title", nullable = false)
     private String title;
 
+    @JsonProperty("vote_average")
     @Column(name="vote_average")
-    private Float vote_average;
+    private Float voteAverage;
 
+    @JsonProperty("vote_count")
     @Column(name="vote_count")
-    private Integer vote_count;
+    private Integer voteCount;
 
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonProperty("release_date")
     @Column(name="release_date")
-    private LocalDate release_date;
+    private LocalDate releaseDate;
 
     @Column(name="overview",columnDefinition = "TEXT")
     private String overview;
 
-    @ManyToMany
+    @JsonIgnore
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "movie_genre",
             joinColumns = @JoinColumn(name = "id_movie"),
@@ -51,22 +62,6 @@ public class MyMovie {
         }).collect(Collectors.toSet());
     }
 
-    public Float getVote_average() {
-        return vote_average;
-    }
-
-    public void setVote_average(Float vote_average) {
-        this.vote_average = vote_average;
-    }
-
-    public Integer getVote_count() {
-        return vote_count;
-    }
-
-    public void setVote_count(Integer vote_count) {
-        this.vote_count = vote_count;
-    }
-
     public Long getId() {
         return id;
     }
@@ -75,12 +70,12 @@ public class MyMovie {
         this.id = id;
     }
 
-    public String getPoster_path() {
-        return poster_path;
+    public String getPosterPath() {
+        return posterPath;
     }
 
-    public void setPoster_path(String poster_path) {
-        this.poster_path = poster_path;
+    public void setPosterPath(String posterPath) {
+        this.posterPath = posterPath;
     }
 
     public String getTitle() {
@@ -91,12 +86,28 @@ public class MyMovie {
         this.title = title;
     }
 
-    public LocalDate getRelease_date() {
-        return release_date;
+    public Float getVoteAverage() {
+        return voteAverage;
     }
 
-    public void setRelease_date(LocalDate release_date) {
-        this.release_date = release_date;
+    public void setVoteAverage(Float voteAverage) {
+        this.voteAverage = voteAverage;
+    }
+
+    public Integer getVoteCount() {
+        return voteCount;
+    }
+
+    public void setVoteCount(Integer voteCount) {
+        this.voteCount = voteCount;
+    }
+
+    public LocalDate getReleaseDate() {
+        return releaseDate;
+    }
+
+    public void setReleaseDate(LocalDate releaseDate) {
+        this.releaseDate = releaseDate;
     }
 
     public String getOverview() {
@@ -119,7 +130,7 @@ public class MyMovie {
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         MyMovie myMovie = (MyMovie) o;
-        return id == myMovie.id && Objects.equals(title, myMovie.title);
+        return Objects.equals(id, myMovie.id) && Objects.equals(title, myMovie.title);
     }
 
     @Override
@@ -131,11 +142,11 @@ public class MyMovie {
     public String toString() {
         return "MyMovie{" +
                 "id=" + id +
-                ", poster_path='" + poster_path + '\'' +
+                ", poster_path='" + posterPath + '\'' +
                 ", title='" + title + '\'' +
-                ", vote_average=" + vote_average +
-                ", vote_count=" + vote_count +
-                ", release_date=" + release_date +
+                ", vote_average=" + voteAverage +
+                ", vote_count=" + voteCount +
+                ", release_date=" + releaseDate +
                 ", overview='" + overview + '\'' +
                 ", genres=" + genres +
                 '}';

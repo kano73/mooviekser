@@ -1,11 +1,11 @@
 package org.movier.controller;
 
-import org.movier.model.details.MyUserDetails;
+import jakarta.validation.constraints.NotNull;
 import org.movier.service.PageBuilderService;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class PageController {
@@ -16,10 +16,38 @@ public class PageController {
     }
 
     @GetMapping("/login")
-    public String login(Model model) {
+    public String login() {
         return "login";
     }
 
     @GetMapping("/register")
     public String register() {return "register";}
+
+
+    @GetMapping("/profile")
+    public String profile() {
+        return "profile";
+    }
+
+    @GetMapping("/change_profile")
+    public String change_profile() {
+        return "change_profile";
+    }
+
+    @GetMapping("/admin_panel")
+    public String adminPanel() {
+        return "admin_panel";
+    }
+
+    @GetMapping("/search")
+    public String movies(Model model) {
+        pageBuilderService.buildMovies(model);
+        return "search";
+    }
+
+    @GetMapping("/movie")
+    public String getMovie(@NotNull @RequestParam("id") Long id, Model model) {
+        pageBuilderService.buildMovieById(model,id);
+        return "movie";
+    }
 }

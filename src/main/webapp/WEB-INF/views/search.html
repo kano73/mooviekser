@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity" lang="en">
+
+<head>
+    <link rel="stylesheet" th:href="@{/static/css/style.css}">
+    <title>Search for movies</title>
+    <script th:src="@{/static/js/search.js}" defer></script>
+</head>
+<body>
+<div th:replace="~{fragments/header :: div}"></div>
+<div>Movies</div>
+<form>
+    <p>Filter</p>
+    <label for="title"></label>
+    <input id="title" type="text" name="title">
+
+    <label for="genres">Genres:</label>
+    <select id="genres" name="genres" multiple>
+        <option th:each="genre : ${genres}" th:value="${genre.id}" th:text="${genre.name}"></option>
+    </select>
+
+    <label for="from"></label>
+    <input id="from" type="date" name="from">
+
+    <label for="to"></label>
+    <input id="to" type="date" name="to">
+
+    <button id="btnSubmit" type="submit">Search</button>
+</form>
+<div class="pages">
+    <p>Page: <span class="pageNum">1</span></p>
+    <button class="prvPgBtn">previous page</button>
+    <button class="nxtPgBtn">next page</button>
+</div>
+
+    <div class="movies">
+
+    </div>
+
+</body>
+</html>

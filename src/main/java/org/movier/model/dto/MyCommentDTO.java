@@ -5,7 +5,7 @@ import jakarta.validation.constraints.Size;
 
 public class MyCommentDTO {
     @NotNull
-    @Size(min = 1, max = 1000)
+    @Size(min = 1, max = 200)
     private String text;
 
     @NotNull

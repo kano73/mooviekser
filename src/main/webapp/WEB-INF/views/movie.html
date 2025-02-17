@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity" lang="en">
+
+<head>
+    <link rel="stylesheet" th:href="@{/static/css/style.css}">
+    <title>Movie</title>
+    <script th:src="@{/static/js/movie.js}" defer></script>
+</head>
+<body>
+<div th:replace="~{fragments/header :: div}"></div>
+
+<div class="container">
+    <h1 th:text="${movie.title}">Movie Title</h1>
+
+    <img class="poster" th:if="${movie.posterPath}"
+         th:src="'https://image.tmdb.org/t/p/w600_and_h900_bestv2' + ${movie.posterPath}"
+         alt="Poster">
+
+    <button id="watchedBtn" th:text="${isWatched} ? 'Remove from watched' : 'Add to watched'"></button>
+
+    <p><strong>Release Date:</strong> <span th:text="${movie.releaseDate}"></span></p>
+    <p><strong>Rating:</strong> <span th:text="${movie.voteAverage}"></span> (Votes: <span th:text="${movie.voteCount}"></span>)</p>
+    <p><strong>Overview:</strong> <span th:text="${movie.overview}"></span></p>
+
+    <div class="genres">
+        <span class="genre" th:each="genre : ${movie.genres}" th:text="${genre.name}+'  '"></span>
+    </div>
+
+    <form id="ratingForm">
+        <p>Rate the film:</p>
+        <label for="rating">Rate:</label>
+        <input type="number" id="rating" name="rating" step="0.1" min="0.1" max="10.0" required>
+
+        <button type="submit">Send</button>
+    </form>
+
+    <form id="commentForm">
+        <label for="comment"></label>
+        <input type="text" name="text" id="comment" placeholder="Leave a comment" required/>
+        <button id="btnSubmit" type="submit">Send</button>
+    </form>
+    <div class="comments"></div>
+</div>
+
+</body>
+</html>

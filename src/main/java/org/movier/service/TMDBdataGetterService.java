@@ -65,16 +65,8 @@ public class TMDBdataGetterService {
 
     @Scheduled(cron = "0 47 14 * * ?")
     public void getLatestMovies() {
-
         LocalDate latestDate = myMovieRepository.getLatestDate();
-
-        System.out.println("date:"+latestDate);
-
-        List<MyMovie> list = getMoviesReleasedAfter(latestDate);
-
-        System.out.println("list:"+list);
-
-        myMovieRepository.saveAll(list);
+        myMovieRepository.saveAll(getMoviesReleasedAfter(latestDate));
     }
 
     public List<MyMovie> getPopularMovies() {

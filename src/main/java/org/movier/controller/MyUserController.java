@@ -1,22 +1,24 @@
 package org.movier.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
+import org.movier.config.security.AuthenticatedMyUserService;
+import org.movier.model.dto.MyUserChangeDTO;
 import org.movier.model.dto.MyUserRegisterDTO;
-import org.movier.service.EmailValidationService;
-import org.movier.model.entity.MyUser;
 import org.movier.service.MyUserService;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 
 @RestController
 public class MyUserController {
 
     private final MyUserService myUserService;
-    private final EmailValidationService emailValidationService;
+    private final AuthenticatedMyUserService authenticatedMyUserService;
 
-    public MyUserController(MyUserService myUserService, EmailValidationService emailValidationService) {
+    public MyUserController(MyUserService myUserService, AuthenticatedMyUserService authenticatedMyUserService) {
         this.myUserService = myUserService;
-        this.emailValidationService = emailValidationService;
+        this.authenticatedMyUserService = authenticatedMyUserService;
     }
 
     @PostMapping("/register")
@@ -26,12 +28,16 @@ public class MyUserController {
 
     @GetMapping("/verify")
     public String verifyEmail(@RequestParam("token") String token) {
-        MyUser user = emailValidationService.findByToken(token);
-        if (user!=null) {
-            myUserService.verifyEmail(user);
+        return myUserService.verifyEmail(token) ? "success" : "fail";
+    }
+
+    @PostMapping("/change_profile")
+    public String changeProfile(@RequestBody @Valid MyUserChangeDTO dto, HttpServletRequest request, HttpServletResponse response){
+        if(myUserService.updateUser(dto)){
+            authenticatedMyUserService.logoutCurrentUser(request, response);
             return "success";
         }else{
-            return "link is not valid";
+            return "fail";
         }
     }
 }

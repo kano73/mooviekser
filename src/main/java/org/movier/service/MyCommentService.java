@@ -11,6 +11,7 @@ import org.movier.model.entity.MyComment;
 import org.movier.model.entity.MyMovie;
 import org.movier.model.entity.MyUser;
 import org.movier.model.enums.RoleEnum;
+import org.movier.model.responce.MyCommentResponse;
 import org.movier.repository.MyCommentRepository;
 import org.movier.repository.MyMovieRepository;
 import org.springframework.stereotype.Service;
@@ -64,8 +65,10 @@ public class MyCommentService {
         }
     }
 
-    public List<MyComment> findAllCommentsForMovie(@Valid Long movieId) {
-        MyMovie movie = myMovieRepository.findById(movieId).orElseThrow(()->new MovieDoesNotExistsException("no movie found with id: "+movieId));
-        return myCommentRepository.findAllByMovie(movie);
+    public List<MyCommentResponse> findAllCommentsForMovie(@Valid Long movieId) {
+        if(!myMovieRepository.existsById(movieId)){
+            throw new MovieDoesNotExistsException("no movie found with id: "+movieId);
+        }
+        return myCommentRepository.findAllByMoviePublicInfo(movieId);
     }
 }

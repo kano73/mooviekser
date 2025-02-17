@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity" lang="en">
+
+<head>
+    <link rel="stylesheet" th:href="@{/static/css/style.css}">
+    <title>Home</title>
+    <script th:src="@{/static/js/admin_panel.js}" defer></script>
+</head>
+<body>
+<div th:replace="~{fragments/header :: div}"></div>
+<h2>Welcome, <span sec:authentication="name"></span>!</h2>
+
+<p>This is admin panel</p>
+<form id="banForm">
+    <p>Ban user</p>
+    <label for="username"></label>
+    <input id="username" type="text" name="username">
+    <button id="btnSubmit" type="submit">Ban</button>
+</form>
+<form id="unbanForm">
+    <p>Unban user</p>
+    <label for="username2"></label>
+    <input id="username2" type="text" name="username">
+    <button id="btnSubmit2" type="submit">Ban</button>
+</form>
+<form id="addToAdminForm">
+    <p>Add admin</p>
+    <label for="username1"></label>
+    <input id="username1" type="text" name="username">
+    <button id="btnSubmit1" type="submit">Make an admin</button>
+</form>
+</body>
+</html>
