@@ -17,13 +17,10 @@ import java.util.UUID;
 public class EmailService {
     private final EmailValidationRepository emailValidationRepository;
     private final MailSenderService mailSenderService;
-    private final AdminInvitationRepository adminInvitationRepository;
 
-
-    public EmailService(EmailValidationRepository emailValidationRepository, MailSenderService mailSenderService, AdminInvitationRepository adminInvitationRepository) {
+    public EmailService(EmailValidationRepository emailValidationRepository, MailSenderService mailSenderService) {
         this.emailValidationRepository = emailValidationRepository;
         this.mailSenderService = mailSenderService;
-        this.adminInvitationRepository = adminInvitationRepository;
     }
 
     public MyUser findByToken(String token) {
@@ -64,10 +61,6 @@ public class EmailService {
     @Transactional(propagation = Propagation.SUPPORTS, rollbackFor = {Exception.class, RuntimeException.class})
     public void sendAdminInvitation(AdminInvitation adminInvitation) {
         MyUser user = adminInvitation.getUser();
-        if(adminInvitationRepository.findByUser(user).isPresent()) {
-            adminInvitationRepository.deleteByUser(user);
-        }
-
         try{
             String text = "You was invited to be an admin! \n" +
                     " To accept invitation, please follow this instructions: \n" +

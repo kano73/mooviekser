@@ -43,10 +43,11 @@ public class AdminInvitationService {
         }while (adminInvitationRepository.findByToken(uuid).isPresent());
 
         adminInvitation.setToken(uuid);
-
-        adminInvitationRepository.save(adminInvitation);
-
         emailService.sendAdminInvitation(adminInvitation);
+        if(adminInvitationRepository.findByUser(user).isPresent()) {
+            adminInvitationRepository.deleteByUser(user);
+        }
+        adminInvitationRepository.save(adminInvitation);
     }
 
     @Transactional(rollbackFor = {Exception.class, RuntimeException.class})
