@@ -40,7 +40,7 @@ public class SecurityConfiguration {
                 .formLogin(login -> login
                         .loginPage("/login")
                         .failureHandler(customAuthenticationFailureHandler())
-                        .defaultSuccessUrl("/movies", true)
+                        .defaultSuccessUrl("/search", true)
                         .permitAll()
                 )
                 .logout(logout -> logout

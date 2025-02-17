@@ -8,6 +8,10 @@ import org.movier.model.dto.MyUserChangeDTO;
 import org.movier.model.dto.MyUserRegisterDTO;
 import org.movier.service.MyUserService;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.view.RedirectView;
+
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 
 
 @RestController
@@ -27,8 +31,15 @@ public class MyUserController {
     }
 
     @GetMapping("/verify")
-    public String verifyEmail(@RequestParam("token") String token) {
-        return myUserService.verifyEmail(token) ? "redirect:/login?" : "fail";
+    public RedirectView verifyEmail(@RequestParam("token") String token) {
+        boolean isVerified = myUserService.verifyEmail(token);
+        if (isVerified) {
+            String message = "Your email address is activated.";
+            String encodedMessage = URLEncoder.encode(message, StandardCharsets.UTF_8);
+            return new RedirectView("/login?verify=" + encodedMessage);
+        } else {
+            return new RedirectView("/error");
+        }
     }
 
     @PostMapping("/change_profile")

@@ -13,6 +13,6 @@
 <div sec:authorize="hasRole('ROLE_ADMIN')">You are an admin.</div>
 <p>Your email: <span sec:authentication="principal.email"></span></p>
 <a th:href="@{/change_profile}"><button>Change your personal information</button></a>
-<a th:href="@{/watched}">My watched movies</a>
+<p><a th:href="@{/watched}">My watched movies</a></p>
 </body>
 </html>
