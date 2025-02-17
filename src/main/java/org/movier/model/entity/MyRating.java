@@ -58,7 +58,7 @@ public class MyRating {
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         MyRating myRating = (MyRating) o;
-        return id == myRating.id;
+        return Objects.equals(id, myRating.id);
     }
 
     @Override

@@ -22,16 +22,6 @@ public class AuthenticatedMyUserService {
         }
     }
 
-    public MyUserDetails getCurrentUserDetailsAuthenticated() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-        if (authentication.getPrincipal() instanceof MyUserDetails userDetails) {
-            return userDetails;
-        }else {
-            throw new UserNotFoundException("Please login");
-        }
-    }
-
     public void logoutCurrentUser(HttpServletRequest request, HttpServletResponse response) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth != null) {

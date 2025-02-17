@@ -48,14 +48,8 @@ public class WatchedService {
         return true;
     }
 
-    public Long countWatchedFourMovie(Long movieId) {
-        MyMovie movie = myMovieRepository.findById(movieId)
-                .orElseThrow(()->new MovieDoesNotExistsException("Movie does not exist with id " + movieId));
-        return watchedRepository.countFavoriteByMovie(movie);
-    }
-
     public Boolean isUserWatchedThisMovie(@NotNull Long movieId, MyUser user) {
-        MyMovie movie = myMovieRepository.findById(movieId)
+        myMovieRepository.findById(movieId)
                 .orElseThrow(()->new MovieDoesNotExistsException("Movie does not exist with id " + movieId));
 
         return watchedRepository.findByUserAndMovie_Id(user, movieId).isPresent();

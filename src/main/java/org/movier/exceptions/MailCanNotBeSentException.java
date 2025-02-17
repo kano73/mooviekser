@@ -12,8 +12,4 @@ public class MailCanNotBeSentException extends RuntimeException  implements Cust
     public MailCanNotBeSentException(String message) {
         super(message);
     }
-
-    public MailCanNotBeSentException(String message, RuntimeException e) {
-        super(message);
-    }
 }

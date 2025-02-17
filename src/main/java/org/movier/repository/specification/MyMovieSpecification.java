@@ -38,6 +38,7 @@ public class MyMovieSpecification {
                 return criteriaBuilder.conjunction();
             }
             Join<MyMovie, MyGenre> genresJoin = root.join("genres", JoinType.LEFT);
+            assert query != null;
             query.distinct(true);
             return genresJoin.get("id").in(genreIds);
         };

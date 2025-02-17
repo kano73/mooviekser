@@ -6,7 +6,6 @@ import org.movier.exceptions.UserDontHaveRightsForActionException;
 import org.movier.model.entity.MyUser;
 import org.movier.model.enums.RoleEnum;
 import org.movier.service.AdminInvitationService;
-import org.movier.service.MyCommentService;
 import org.movier.service.MyUserService;
 import org.springframework.web.bind.annotation.*;
 

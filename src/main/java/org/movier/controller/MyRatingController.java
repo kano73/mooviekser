@@ -2,12 +2,9 @@ package org.movier.controller;
 
 import jakarta.validation.Valid;
 import org.movier.model.dto.MyRatingDTO;
-import org.movier.model.dto.WatchedDTO;
 import org.movier.service.MyRatingService;
-import org.movier.service.WatchedService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController

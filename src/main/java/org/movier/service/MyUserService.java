@@ -99,15 +99,6 @@ public class MyUserService {
         }
     }
 
-    public boolean addAdminByUsername(@NotNull String username) {
-        MyUser user = myUserRepository.findByUsernameIgnoreCase(username)
-                .orElseThrow(()-> new MyUserNotFoundException("No user found with username: "+username));
-
-        user.setRole(RoleEnum.ADMIN);
-        myUserRepository.save(user);
-        return true;
-    }
-
     public boolean banUserByUsername(@NotNull String username) {
         MyUser user = myUserRepository.findByUsernameIgnoreCase(username)
                 .orElseThrow(()-> new MyUserNotFoundException("No user found with username: "+username));

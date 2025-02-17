@@ -53,7 +53,7 @@ public class EmailService {
             String text = "To confirm your email address, please click on the following link: http://localhost:8080/verify?token=";
             mailSenderService.sendEmail(user.getEmail(),"Email Validation", text +uuid);
         }catch(RuntimeException e){
-            throw new MailCanNotBeSentException("unable to send mail " ,e);
+            throw new MailCanNotBeSentException("unable to send mail ");
         }
     }
 
@@ -75,7 +75,7 @@ public class EmailService {
                     " 2) Follow this link: http://localhost:8080/accept?token="+adminInvitation.getToken();
             mailSenderService.sendEmail(user.getEmail(),"Email Validation", text );
         }catch(RuntimeException e){
-            throw new MailCanNotBeSentException("unable to send mail " ,e);
+            throw new MailCanNotBeSentException("unable to send mail ");
         }
     }
 }

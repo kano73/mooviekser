@@ -5,7 +5,6 @@ import org.movier.exceptions.MovieDoesNotExistsException;
 import org.movier.model.dto.MyMovieSearchDTO;
 import org.movier.model.entity.MyMovie;
 import org.movier.model.entity.MyUser;
-import org.movier.model.entity.Watched;
 import org.movier.model.responce.MyMovieSimpleInfoDTO;
 import org.movier.repository.MyMovieRepository;
 import org.movier.repository.WatchedRepository;
@@ -27,15 +26,13 @@ public class MyMovieService {
     private final WatchedRepository watchedRepository;
     private final AuthenticatedMyUserService auth;
     private final MyMovieRepository myMovieRepository;
-    private final FavoriteService favoriteService;
 
     @Value("${movies.page.size}")
     private Integer pageSize;
 
-    public MyMovieService(AuthenticatedMyUserService auth, MyMovieRepository myMovieRepository, FavoriteService favoriteService, WatchedRepository watchedRepository) {
-        this.auth = auth;
+    public MyMovieService(MyMovieRepository myMovieRepository, AuthenticatedMyUserService auth, WatchedRepository watchedRepository) {
         this.myMovieRepository = myMovieRepository;
-        this.favoriteService = favoriteService;
+        this.auth = auth;
         this.watchedRepository = watchedRepository;
     }
 
@@ -74,11 +71,5 @@ public class MyMovieService {
                 .map(m -> new MyMovieSimpleInfoDTO(m.getId(), m.getPosterPath(), m.getTitle(),
                         m.getVoteAverage(), m.getReleaseDate(), m.getVoteCount()))
                 .collect(Collectors.toList());
-    }
-
-    @Transactional
-    public List<MyMovie> findAllFavoriteMoviesForUser(int page) {
-        MyUser user = auth.getCurrentUserAuthenticated();
-        return favoriteService.getAllFavoriteMoviesForUser(page);
     }
 }

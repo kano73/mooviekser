@@ -1,7 +1,6 @@
 package org.movier.controller;
 
 import jakarta.validation.Valid;
-import org.movier.model.dto.WatchedDTO;
 import org.movier.model.responce.MyMovieSimpleInfoDTO;
 import org.movier.service.MyMovieService;
 import org.movier.service.WatchedService;

@@ -6,7 +6,6 @@ import org.movier.exceptions.CommentNotFoundException;
 import org.movier.exceptions.MovieDoesNotExistsException;
 import org.movier.exceptions.UserDontHaveRightsForActionException;
 import org.movier.model.dto.MyCommentDTO;
-import org.movier.model.dto.MyCommentDeleteDTO;
 import org.movier.model.entity.MyComment;
 import org.movier.model.entity.MyMovie;
 import org.movier.model.entity.MyUser;

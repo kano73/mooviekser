@@ -6,9 +6,7 @@ import org.movier.exceptions.UserNotFoundException;
 import org.movier.model.entity.MyGenre;
 import org.movier.model.entity.MyMovie;
 import org.movier.model.entity.MyUser;
-import org.movier.model.enums.RoleEnum;
 import org.movier.repository.MyGenreRepository;
-import org.movier.repository.WatchedRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
@@ -18,15 +16,13 @@ import java.util.List;
 public class PageBuilderService {
     private final MyGenreRepository myGenreRepository;
     private final MyMovieService myMovieService;
-    private final WatchedRepository watchedRepository;
     private final WatchedService watchedService;
     private final AuthenticatedMyUserService authenticatedMyUserService;
     private final MyRatingService myRatingService;
 
-    public PageBuilderService(MyGenreRepository myGenreRepository, MyMovieService myMovieService, WatchedRepository watchedRepository, WatchedService watchedService, AuthenticatedMyUserService authenticatedMyUserService, MyRatingService myRatingService) {
+    public PageBuilderService(MyGenreRepository myGenreRepository, MyMovieService myMovieService, WatchedService watchedService, AuthenticatedMyUserService authenticatedMyUserService, MyRatingService myRatingService) {
         this.myGenreRepository = myGenreRepository;
         this.myMovieService = myMovieService;
-        this.watchedRepository = watchedRepository;
         this.watchedService = watchedService;
         this.authenticatedMyUserService = authenticatedMyUserService;
         this.myRatingService = myRatingService;
