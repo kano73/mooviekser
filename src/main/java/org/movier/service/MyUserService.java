@@ -24,7 +24,12 @@ public class MyUserService {
     private final AuthenticatedMyUserService authenticatedMyUserService;
     private final BannedRepository bannedRepository;
 
-    public MyUserService(MyUserRepository myUserRepository, UserValidator userValidator, PasswordEncoder passwordEncoder, EmailService emailService, AuthenticatedMyUserService authenticatedMyUserService, BannedRepository bannedRepository) {
+    public MyUserService(MyUserRepository myUserRepository,
+                         UserValidator userValidator,
+                         PasswordEncoder passwordEncoder,
+                         EmailService emailService,
+                         AuthenticatedMyUserService authenticatedMyUserService,
+                         BannedRepository bannedRepository) {
         this.myUserRepository = myUserRepository;
         this.userValidator = userValidator;
         this.passwordEncoder = passwordEncoder;
@@ -33,18 +38,14 @@ public class MyUserService {
         this.bannedRepository = bannedRepository;
     }
 
-    @Transactional(isolation = Isolation.SERIALIZABLE, rollbackFor = {Exception.class,  RuntimeException.class})
-    public boolean registerUser(MyUser user) {
+    @Transactional(isolation = Isolation.SERIALIZABLE)
+    public boolean registerUser(@NotNull MyUser user, @NotNull RoleEnum role) {
         userValidator.validateUser(user);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.setRole(RoleEnum.USER);
+        user.setRole(role);
         user.setEmailActivated(false);
         myUserRepository.save(user);
-        try {
-            emailService.prepareEmailValidation(user);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        emailService.prepareEmailValidation(user);
         return true;
     }
 
@@ -61,7 +62,7 @@ public class MyUserService {
 
     }
 
-    @Transactional(rollbackFor = {Exception.class, RuntimeException.class})
+    @Transactional
     public boolean updateUser(@Valid MyUserChangeDTO dto) {
         MyUser user = authenticatedMyUserService.getCurrentUserAuthenticated();
         boolean updated = false;

@@ -14,11 +14,10 @@ import java.util.List;
 public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        // Указываем Spring обслуживать статику из webapp/static/
         registry.addResourceHandler("/static/**")
                 .addResourceLocations("classpath:/static/");
     }
-//json setter
+
     @Override
     public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
         converters.add(new MappingJackson2HttpMessageConverter());

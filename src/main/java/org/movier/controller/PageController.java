@@ -23,6 +23,11 @@ public class PageController {
     @GetMapping("/register")
     public String register() {return "register";}
 
+    @GetMapping("/newAdminRegister")
+    public String registerNewAdmin(@NotNull @RequestParam("token") String token ,Model model) {
+        model.addAttribute("url", "/newAdminRegister?token=" + token);
+        return "register";
+    }
 
     @GetMapping("/profile")
     public String profile() {
@@ -40,7 +45,7 @@ public class PageController {
     }
 
     @GetMapping("/search")
-    public String movies(Model model) {
+    public String search(Model model) {
         pageBuilderService.buildMovies(model);
         return "search";
     }
@@ -52,7 +57,7 @@ public class PageController {
     }
 
     @GetMapping("/watched")
-    public String getWatched(){
+    public String watched(){
         return "watched";
     }
 }

@@ -1,5 +1,12 @@
 package org.movier.exceptions.interfaces;
 
-public interface CustomHandledException {
-    String handleException();
+public class CustomHandledException extends RuntimeException {
+
+    public String getCustomMessage() {
+        return super.getMessage();
+    }
+
+    public CustomHandledException(String message) {
+        super(message);
+    }
 }

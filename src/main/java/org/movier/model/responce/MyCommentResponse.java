@@ -1,6 +1,5 @@
 package org.movier.model.responce;
 
-
 import java.time.LocalDateTime;
 
 public class MyCommentResponse {

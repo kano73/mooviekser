@@ -11,14 +11,14 @@ import org.springframework.stereotype.Component;
 
 @Component
 @PropertySource("classpath:application.properties")
-public class DefaultUsers {
+public class DefaultUserSetter {
     private final PasswordEncoder passwordEncoder;
     private final MyUserRepository myUserRepository;
 
     @Value("${admin.password}")
     private String password ;
 
-    public DefaultUsers(PasswordEncoder passwordEncoder, MyUserRepository myUserRepository) {
+    public DefaultUserSetter(PasswordEncoder passwordEncoder, MyUserRepository myUserRepository) {
         this.passwordEncoder = passwordEncoder;
         this.myUserRepository = myUserRepository;
     }

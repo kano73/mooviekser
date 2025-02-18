@@ -6,13 +6,13 @@ import jakarta.validation.Valid;
 import org.movier.config.security.AuthenticatedMyUserService;
 import org.movier.model.dto.MyUserChangeDTO;
 import org.movier.model.dto.MyUserRegisterDTO;
+import org.movier.model.enums.RoleEnum;
 import org.movier.service.MyUserService;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.view.RedirectView;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
-
 
 @RestController
 public class MyUserController {
@@ -27,7 +27,7 @@ public class MyUserController {
 
     @PostMapping("/register")
     public String registerUser(@RequestBody MyUserRegisterDTO user) {
-        return myUserService.registerUser(user.toMyUser()) ? "success" : "fail";
+        return myUserService.registerUser(user.toMyUser(), RoleEnum.USER) ? "success" : "fail";
     }
 
     @GetMapping("/verify")

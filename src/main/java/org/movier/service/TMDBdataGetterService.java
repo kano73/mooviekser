@@ -37,7 +37,10 @@ public class TMDBdataGetterService {
     private final ObjectMapper objectMapper;
     private final MyGenreRepository myGenreRepository;
 
-    public TMDBdataGetterService(RestTemplate restTemplate, MyMovieRepository myMovieRepository, ObjectMapper objectMapper, MyGenreRepository myGenreRepository) {
+    public TMDBdataGetterService(RestTemplate restTemplate,
+                                 MyMovieRepository myMovieRepository,
+                                 ObjectMapper objectMapper,
+                                 MyGenreRepository myGenreRepository) {
         this.restTemplate = restTemplate;
         this.myMovieRepository = myMovieRepository;
         this.objectMapper = objectMapper;

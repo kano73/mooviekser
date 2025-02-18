@@ -14,7 +14,6 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -30,14 +29,17 @@ public class MyMovieService {
     @Value("${movies.page.size}")
     private Integer pageSize;
 
-    public MyMovieService(MyMovieRepository myMovieRepository, AuthenticatedMyUserService auth, WatchedRepository watchedRepository) {
+    public MyMovieService(MyMovieRepository myMovieRepository,
+                          AuthenticatedMyUserService auth,
+                          WatchedRepository watchedRepository) {
         this.myMovieRepository = myMovieRepository;
         this.auth = auth;
         this.watchedRepository = watchedRepository;
     }
 
     public MyMovie findById(Long id) {
-        return myMovieRepository.findByIdWithGenres(id).orElseThrow(()-> new MovieDoesNotExistsException("no movie with id " + id));
+        return myMovieRepository.findByIdWithGenres(id)
+                .orElseThrow(()-> new MovieDoesNotExistsException("no movie with id " + id));
     }
 
     public List<MyMovieSimpleInfoDTO> findAllWatchedMovies() {
@@ -45,7 +47,6 @@ public class MyMovieService {
         return watchedRepository.findAllMoviesByUser(user);
     }
 
-    @Transactional
     public List<MyMovieSimpleInfoDTO> findAllPageable(int page) {
         if(page < 1) {
             page = 1;
@@ -53,7 +54,6 @@ public class MyMovieService {
         return myMovieRepository.findAllSimpleInfo(PageRequest.of(page-1, pageSize));
     }
 
-    @Transactional
     public List<MyMovieSimpleInfoDTO> findAllByParams(int page, MyMovieSearchDTO dto) {
         if(page < 1) {
             page = 1;

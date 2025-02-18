@@ -1,5 +1,6 @@
 package org.movier.repository;
 
+import jakarta.validation.constraints.NotNull;
 import org.movier.model.entity.MyComment;
 import org.movier.model.responce.MyCommentResponse;
 import org.springframework.data.jpa.repository.Query;
@@ -13,10 +14,7 @@ import java.util.List;
 public interface MyCommentRepository extends CrudRepository<MyComment, Long> {
 
     @Override
-    void deleteById(Long aLong);
-
-    @Override
-    <S extends MyComment> S save(S entity);
+    void deleteById(@NotNull Long aLong);
 
     @Query("SELECT new  org.movier.model.responce.MyCommentResponse(c.id, c.text, u.username, u.id, c.timestamp) " +
             "FROM MyComment c " +

@@ -11,6 +11,9 @@ import java.util.List;
 
 public class MyMovieSpecification {
 
+    private MyMovieSpecification() {
+    }
+
     public static Specification<MyMovie> hasTitle(String title) {
         return (root, query, criteriaBuilder) ->
                 title == null || title.isEmpty()

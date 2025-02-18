@@ -2,12 +2,8 @@ package org.movier.exceptions;
 
 import org.movier.exceptions.interfaces.CustomHandledException;
 
-public class UserNotFoundException extends RuntimeException   implements CustomHandledException {
+public class UserNotFoundException extends   CustomHandledException {
 
-    @Override
-    public String handleException() {
-        return super.getMessage();
-    }
     public UserNotFoundException(String message) {
         super(message);
     }

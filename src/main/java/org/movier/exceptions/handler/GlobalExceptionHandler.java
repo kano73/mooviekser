@@ -10,15 +10,12 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
 @ControllerAdvice
-public class GlobalUserExceptionHandler {
+public class GlobalExceptionHandler {
 
-    @ExceptionHandler(RuntimeException.class)
+    @ExceptionHandler(CustomHandledException.class)
     @ResponseBody
-    public String EmailIsInUseException (RuntimeException exception){
-        if (exception instanceof CustomHandledException customException) {
-            return customException.handleException();
-        }
-        return "Error accused: "+exception.getMessage();
+    public String customRuntime (CustomHandledException exception){
+        return exception.getCustomMessage();
     }
 
     @ExceptionHandler(NoHandlerFoundException.class)
@@ -28,4 +25,9 @@ public class GlobalUserExceptionHandler {
         return "error";
     }
 
+    @ExceptionHandler(RuntimeException.class)
+    @ResponseBody
+    public String runtime (RuntimeException exception){
+        return exception.getMessage();
+    }
 }

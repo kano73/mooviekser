@@ -23,7 +23,7 @@ public class MyUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username){
         MyUser myUser = myUserRepository.findByUsernameIgnoreCase(username).orElseThrow(
-                                                    () -> new UsernameNotFoundException("no user found with such username")
+                                        () -> new UsernameNotFoundException("no user found with such username")
                 );
 
         return new MyUserDetails(myUser, bannedRepository);

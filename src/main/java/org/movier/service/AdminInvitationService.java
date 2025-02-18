@@ -1,9 +1,7 @@
 package org.movier.service;
 
 import jakarta.validation.constraints.NotNull;
-import org.movier.config.security.AuthenticatedMyUserService;
 import org.movier.exceptions.MyUserNotFoundException;
-import org.movier.exceptions.ResultIsEmptyException;
 import org.movier.model.entity.AdminInvitation;
 import org.movier.model.entity.MyUser;
 import org.movier.model.enums.RoleEnum;
@@ -20,16 +18,19 @@ public class AdminInvitationService {
     private final AdminInvitationRepository adminInvitationRepository;
     private final EmailService emailService;
     private final MyUserRepository myUserRepository;
-    private final AuthenticatedMyUserService authenticatedMyUserService;
+    private final MyUserService myUserService;
 
-    public AdminInvitationService(AdminInvitationRepository adminInvitationRepository, EmailService emailService, MyUserRepository myUserRepository, AuthenticatedMyUserService authenticatedMyUserService) {
+    public AdminInvitationService(AdminInvitationRepository adminInvitationRepository,
+                                  EmailService emailService,
+                                  MyUserRepository myUserRepository,
+                                  MyUserService myUserService) {
         this.adminInvitationRepository = adminInvitationRepository;
         this.emailService = emailService;
         this.myUserRepository = myUserRepository;
-        this.authenticatedMyUserService = authenticatedMyUserService;
+        this.myUserService = myUserService;
     }
 
-    @Transactional(rollbackFor = {Exception.class, RuntimeException.class})
+    @Transactional
     public void sendInvitation(@NotNull String username) {
         MyUser user = myUserRepository.findByUsernameIgnoreCase(username)
                 .orElseThrow(()-> new MyUserNotFoundException("No user found with username: "+username));
@@ -50,22 +51,11 @@ public class AdminInvitationService {
         adminInvitationRepository.save(adminInvitation);
     }
 
-    @Transactional(rollbackFor = {Exception.class, RuntimeException.class})
-    public void acceptInvitation(@NotNull String token) {
-        MyUser user = authenticatedMyUserService.getCurrentUserAuthenticated();
-
-        AdminInvitation adminInvitation = adminInvitationRepository.findByToken(token)
-                .orElseThrow(() -> new ResultIsEmptyException("No invitation found"));
-
-        if(!adminInvitation.getUser().equals(user)) {
-            throw new ResultIsEmptyException("No invitation found");
-        }
-
-        user.setRole(RoleEnum.ADMIN);
-        myUserRepository.save(user);
-        adminInvitationRepository.delete(adminInvitation);
+    @Transactional
+    public void acceptInvitation(@NotNull String token, MyUser user) {
+        adminInvitationRepository.deleteByToken(token);
+        myUserService.registerUser(user, RoleEnum.ADMIN);
     }
-
 }
 
 

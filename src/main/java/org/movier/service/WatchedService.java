@@ -20,7 +20,9 @@ public class WatchedService {
     private final AuthenticatedMyUserService auth;
     private final MyMovieRepository myMovieRepository;
 
-    public WatchedService(WatchedRepository watchedRepository, AuthenticatedMyUserService authenticatedMyUserService, MyMovieRepository myMovieRepository) {
+    public WatchedService(WatchedRepository watchedRepository,
+                          AuthenticatedMyUserService authenticatedMyUserService,
+                          MyMovieRepository myMovieRepository) {
         this.watchedRepository = watchedRepository;
         this.auth = authenticatedMyUserService;
         this.myMovieRepository = myMovieRepository;

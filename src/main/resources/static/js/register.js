@@ -22,7 +22,7 @@ document.getElementById('registerForm').addEventListener('submit', function(even
     const submitButton = document.getElementById('btnSubmit');
     submitButton.disabled = true;
 
-    fetch('/register', {
+    fetch(urlToSend, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',

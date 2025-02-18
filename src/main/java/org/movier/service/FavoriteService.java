@@ -22,7 +22,9 @@ public class FavoriteService {
     private final AuthenticatedMyUserService auth;
     private final MyMovieRepository myMovieRepository;
 
-    public FavoriteService(FavoriteRepository favoriteRepository, AuthenticatedMyUserService auth, MyMovieRepository myMovieRepository) {
+    public FavoriteService(FavoriteRepository favoriteRepository,
+                           AuthenticatedMyUserService auth,
+                           MyMovieRepository myMovieRepository) {
         this.favoriteRepository = favoriteRepository;
         this.auth = auth;
         this.myMovieRepository = myMovieRepository;

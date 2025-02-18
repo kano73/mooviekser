@@ -24,7 +24,9 @@ public class MyCommentService {
     private final AuthenticatedMyUserService auth;
     private final MyMovieRepository myMovieRepository;
 
-    public MyCommentService(MyCommentRepository myCommentRepository, AuthenticatedMyUserService auth, MyMovieRepository myMovieRepository) {
+    public MyCommentService(MyCommentRepository myCommentRepository,
+                            AuthenticatedMyUserService auth,
+                            MyMovieRepository myMovieRepository) {
         this.myCommentRepository = myCommentRepository;
         this.auth = auth;
         this.myMovieRepository = myMovieRepository;

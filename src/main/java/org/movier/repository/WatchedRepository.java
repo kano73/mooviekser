@@ -1,6 +1,5 @@
 package org.movier.repository;
 
-import org.movier.model.entity.MyMovie;
 import org.movier.model.entity.MyUser;
 import org.movier.model.entity.Watched;
 import org.movier.model.responce.MyMovieSimpleInfoDTO;
@@ -14,19 +13,11 @@ import java.util.Optional;
 
 public interface WatchedRepository extends JpaRepository<Watched, Integer> {
 
-    @Override
-    <S extends Watched> S save(S entity);
-
+        
     @Query("SELECT new org.movier.model.responce.MyMovieSimpleInfoDTO( " +
             "m.id, m.posterPath, m.title, m.voteAverage, m.releaseDate, m.voteCount) " +
             "FROM Watched w JOIN w.movie m WHERE w.user = :user")
     List<MyMovieSimpleInfoDTO> findAllMoviesByUser(@Param("user") MyUser user);
-
-    long countFavoriteByUser(MyUser user);
-
-    long countFavoriteByMovie(MyMovie movie);
-
-    void deleteByUserAndMovie(MyUser user, MyMovie movie);
 
     Optional<Watched> findByUserAndMovie_Id(MyUser user, Long movieId);
 

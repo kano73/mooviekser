@@ -20,7 +20,11 @@ public class PageBuilderService {
     private final AuthenticatedMyUserService authenticatedMyUserService;
     private final MyRatingService myRatingService;
 
-    public PageBuilderService(MyGenreRepository myGenreRepository, MyMovieService myMovieService, WatchedService watchedService, AuthenticatedMyUserService authenticatedMyUserService, MyRatingService myRatingService) {
+    public PageBuilderService(MyGenreRepository myGenreRepository,
+                              MyMovieService myMovieService,
+                              WatchedService watchedService,
+                              AuthenticatedMyUserService authenticatedMyUserService,
+                              MyRatingService myRatingService) {
         this.myGenreRepository = myGenreRepository;
         this.myMovieService = myMovieService;
         this.watchedService = watchedService;

@@ -15,8 +15,6 @@ import java.util.Optional;
 @Repository
 public interface EmailValidationRepository extends JpaRepository<EmailValidation, Integer> {
 
-    <S extends EmailValidation> S save(S entity);
-
     Optional<EmailValidation> findByToken(String token);
 
     List<EmailValidation> findByUser(MyUser user);

@@ -8,11 +8,12 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Optional;
 
 public interface AdminInvitationRepository extends JpaRepository<AdminInvitation, Integer> {
-    @Transactional
-    @Override
-    <S extends AdminInvitation> S save(S entity);
 
+    @Transactional
     void deleteByUser(MyUser user);
+
+    @Transactional
+    void deleteByToken(String token);
 
     Optional<AdminInvitation> findByToken(String token);
 

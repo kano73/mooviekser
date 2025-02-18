@@ -1,6 +1,6 @@
 package org.movier.controller;
 
-import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import org.movier.model.responce.MyMovieSimpleInfoDTO;
 import org.movier.service.MyMovieService;
 import org.movier.service.WatchedService;
@@ -20,7 +20,7 @@ public class WatchedController {
     }
 
     @PostMapping("/watched")
-    public String addToWatched(@Valid @RequestParam("movieId") Long movieId) {
+    public String addToWatched(@NotNull @RequestParam("movieId") Long movieId) {
         return watchedService.saveOrDelete(movieId) ? "success": "fail";
     }
 

@@ -2,12 +2,8 @@ package org.movier.exceptions;
 
 import org.movier.exceptions.interfaces.CustomHandledException;
 
-public class UsernameIsInUseException extends RuntimeException   implements CustomHandledException {
+public class UsernameIsInUseException extends   CustomHandledException {
 
-    @Override
-    public String handleException() {
-        return super.getMessage();
-    }
     public UsernameIsInUseException(String message) {
         super(message);
     }

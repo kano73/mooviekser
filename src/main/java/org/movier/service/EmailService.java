@@ -7,8 +7,6 @@ import org.movier.model.entity.EmailValidation;
 import org.movier.model.entity.MyUser;
 import org.movier.repository.EmailValidationRepository;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 
@@ -28,7 +26,6 @@ public class EmailService {
                 .getUser();
     }
 
-    @Transactional(propagation = Propagation.SUPPORTS, rollbackFor = {Exception.class, RuntimeException.class})
     public void prepareEmailValidation(MyUser user) {
         if(emailValidationRepository.findByUser(user) != null) {
             emailValidationRepository.deleteByUser(user);
@@ -46,9 +43,10 @@ public class EmailService {
         emailValidationRepository.save(emailValidation);
 
         try{
-            String text = "To confirm your email address, please click on the following link: http://localhost:8080/verify?token=";
+            String text = "To confirm your email address," +
+                    " please click on the following link: http://localhost:8080/verify?token=";
             mailSenderService.sendEmail(user.getEmail(),"Email Validation", text +uuid);
-        }catch(RuntimeException e){
+        }catch(Exception e){
             throw new MailCanNotBeSentException("unable to send mail ");
         }
     }
@@ -57,16 +55,14 @@ public class EmailService {
         emailValidationRepository.deleteByUser(user);
     }
 
-    @Transactional(propagation = Propagation.SUPPORTS, rollbackFor = {Exception.class, RuntimeException.class})
     public void sendAdminInvitation(AdminInvitation adminInvitation) {
         MyUser user = adminInvitation.getUser();
         try{
             String text = "You was invited to be an admin! \n" +
-                    " To accept invitation, please follow this instructions: \n" +
-                    " 1) Login into your account \n"+
-                    " 2) Follow this link: http://localhost:8080/accept?token="+adminInvitation.getToken();
+                    " To accept invitation, please follow " +
+                    "this link: http://localhost:8080/newAdminRegister?token="+adminInvitation.getToken();
             mailSenderService.sendEmail(user.getEmail(),"Email Validation", text );
-        }catch(RuntimeException e){
+        }catch(Exception e){
             throw new MailCanNotBeSentException("unable to send mail ");
         }
     }

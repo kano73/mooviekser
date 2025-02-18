@@ -10,6 +10,7 @@ import org.movier.model.entity.MyUser;
 import org.movier.repository.MyMovieRepository;
 import org.movier.repository.MyRatingRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
@@ -19,13 +20,15 @@ public class MyRatingService {
     private final AuthenticatedMyUserService auth;
     private final MyMovieRepository myMovieRepository;
 
-    public MyRatingService(MyRatingRepository myRatingRepository, AuthenticatedMyUserService auth, MyMovieRepository myMovieRepository) {
+    public MyRatingService(MyRatingRepository myRatingRepository,
+                           AuthenticatedMyUserService auth,
+                           MyMovieRepository myMovieRepository) {
         this.myRatingRepository = myRatingRepository;
         this.auth = auth;
         this.myMovieRepository = myMovieRepository;
     }
 
-    @Transactional
+    @Transactional(isolation = Isolation.REPEATABLE_READ)
     public boolean save(@Valid MyRatingDTO rateDto) {
         MyUser user = auth.getCurrentUserAuthenticated();
 
@@ -61,7 +64,8 @@ public class MyRatingService {
     }
 
     private void adjustRatingUpdate(MyMovie movie, MyRatingDTO dto, Float oldRating) {
-        movie.setVoteAverage( ( ( movie.getVoteAverage()* movie.getVoteCount() ) - oldRating + dto.getRating() )/ movie.getVoteCount());
+        movie.setVoteAverage(((movie.getVoteAverage()* movie.getVoteCount())-oldRating+dto.getRating())
+                / movie.getVoteCount());
     }
 
     public Float getValueByUser_IdAndMovie_Id(Long userId, Long movieId) {
