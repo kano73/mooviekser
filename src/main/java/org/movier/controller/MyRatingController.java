@@ -17,6 +17,6 @@ public class MyRatingController {
 
     @PostMapping("/rate")
     public String rate(@Valid @RequestBody MyRatingDTO dto) {
-        return myRatingService.save(dto) ? "success" : "fail";
+        return myRatingService.saveRating(dto) ? "success" : "fail";
     }
 }

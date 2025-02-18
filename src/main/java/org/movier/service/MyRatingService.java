@@ -29,7 +29,7 @@ public class MyRatingService {
     }
 
     @Transactional(isolation = Isolation.REPEATABLE_READ)
-    public boolean save(@Valid MyRatingDTO rateDto) {
+    public boolean saveRating(@Valid MyRatingDTO rateDto) {
         MyUser user = auth.getCurrentUserAuthenticated();
 
         MyMovie movie = myMovieRepository.findById(rateDto.getMovieId())
