@@ -6,10 +6,15 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import jakarta.annotation.PostConstruct;
+import org.movier.exceptions.MyParsingJsonException;
+import org.movier.exceptions.MyRequestException;
+import org.movier.exceptions.TMDBAPIException;
 import org.movier.model.entity.MyGenre;
 import org.movier.model.entity.MyMovie;
 import org.movier.repository.MyGenreRepository;
 import org.movier.repository.MyMovieRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.HttpEntity;
@@ -25,12 +30,13 @@ import org.springframework.http.HttpMethod;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.stream.IntStream;
+import java.util.concurrent.*;
 
 @Service
 @PropertySource("classpath:application.properties")
 public class TMDBdataGetterService {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(TMDBdataGetterService.class);
 
     private final RestTemplate restTemplate;
     private final MyMovieRepository myMovieRepository;
@@ -72,25 +78,41 @@ public class TMDBdataGetterService {
         myMovieRepository.saveAll(getMoviesReleasedAfter(latestDate));
     }
 
-    public List<MyMovie> getPopularMovies() {
-        ConcurrentLinkedQueue<MyMovie> queue = new ConcurrentLinkedQueue<>();
-        IntStream.range(1, 10)
-                .parallel()
-                .forEach(i -> {
-                    String jsonResponse = makeRequest("/movie/popular", i);
-                    try {
-                        JsonNode rootNode = objectMapper.readTree(jsonResponse);
-                        JsonNode resultsNode = rootNode.path("results");
-                        List<MyMovie> movies = objectMapper.readValue(
-                                resultsNode.toString(),
-                                new TypeReference<>() {}
-                        );
-                        queue.addAll(movies);
-                    } catch (Exception e) {
-                        throw new RuntimeException("Error while parsing JSON", e);
-                    }
-                });
-        return new ArrayList<>(queue);
+    private List<MyMovie> getPopularMovies(){
+        try(ExecutorService executor = Executors.newFixedThreadPool(10)){
+            List<Future<List<MyMovie>>> futures = executor.invokeAll(getCallableList());
+
+            List<MyMovie> allMovies = new ArrayList<>();
+            for (Future<List<MyMovie>> future : futures) {
+                allMovies.addAll(future.get());
+            }
+            return allMovies;
+        } catch (ExecutionException | InterruptedException e) {
+            LOGGER.error("Exception while getting new movies");
+            throw new TMDBAPIException("Exception while getting new movies:");
+        }
+    }
+
+    private List<Callable<List<MyMovie>>> getCallableList() {
+        List<Callable<List<MyMovie>>> tasks = new ArrayList<>();
+
+        for (int i = 1; i <= 10; i++) {
+            int page = i;
+            tasks.add(() -> {
+                String jsonResponse = makeRequest("/movie/popular" , page);
+                try {
+                    JsonNode rootNode = objectMapper.readTree(jsonResponse);
+                    JsonNode resultsNode = rootNode.path("results");
+                    return objectMapper.readValue(
+                            resultsNode.toString(),
+                            new TypeReference<>() {}
+                    );
+                } catch (Exception e) {
+                    throw new MyParsingJsonException("Error while parsing JSON for");
+                }
+            });
+        }
+        return tasks;
     }
 
     public List<MyMovie> getMoviesReleasedAfter(LocalDate date) {
@@ -120,10 +142,10 @@ public class TMDBdataGetterService {
                 JsonNode rootNode = objectMapper.readTree(response.getBody());
                 resultsNode = rootNode.path("results");
             } else {
-                throw new RuntimeException("error API: " + response.getStatusCode());
+                throw new MyRequestException("error API: " + response.getStatusCode());
             }
         } catch (Exception e) {
-            throw new RuntimeException("Error while making request", e);
+            throw new MyRequestException("Error while making request");
         }
         try {
             if (resultsNode.isArray()) {
@@ -133,7 +155,7 @@ public class TMDBdataGetterService {
                 }
             }
         } catch (Exception e) {
-            throw new RuntimeException("error while parsing JSON", e);
+            throw new MyParsingJsonException("error while parsing JSON");
         }
 
         return movies;
@@ -151,7 +173,7 @@ public class TMDBdataGetterService {
                     new TypeReference<>() {}
             );
         } catch (Exception e) {
-            throw new RuntimeException("Error while parsing JSON", e);
+            throw new MyParsingJsonException("Error while parsing JSON");
         }
     }
 
@@ -178,10 +200,10 @@ public class TMDBdataGetterService {
             if (response.getStatusCode().is2xxSuccessful()) {
                 return response.getBody();
             } else {
-                throw new RuntimeException("error API: " + response.getStatusCode());
+                throw new MyRequestException("error API: " + response.getStatusCode());
             }
         } catch (Exception e) {
-            throw new RuntimeException("Error while making request", e);
+            throw new MyRequestException("Error while making request");
         }
     }
 }

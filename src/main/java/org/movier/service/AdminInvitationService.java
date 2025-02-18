@@ -2,12 +2,14 @@ package org.movier.service;
 
 import jakarta.validation.constraints.NotNull;
 import org.movier.exceptions.MyUserNotFoundException;
+import org.movier.exceptions.NoInvitationException;
 import org.movier.model.entity.AdminInvitation;
 import org.movier.model.entity.MyUser;
 import org.movier.model.enums.RoleEnum;
 import org.movier.repository.AdminInvitationRepository;
 import org.movier.repository.MyUserRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
@@ -30,7 +32,7 @@ public class AdminInvitationService {
         this.myUserService = myUserService;
     }
 
-    @Transactional
+    @Transactional(isolation = Isolation.SERIALIZABLE)
     public void sendInvitation(@NotNull String username) {
         MyUser user = myUserRepository.findByUsernameIgnoreCase(username)
                 .orElseThrow(()-> new MyUserNotFoundException("No user found with username: "+username));
@@ -51,8 +53,10 @@ public class AdminInvitationService {
         adminInvitationRepository.save(adminInvitation);
     }
 
-    @Transactional
+    @Transactional(isolation = Isolation.SERIALIZABLE)
     public void acceptInvitation(@NotNull String token, MyUser user) {
+        adminInvitationRepository.findByToken(token)
+                .orElseThrow(()-> new NoInvitationException("No invitation found"));
         adminInvitationRepository.deleteByToken(token);
         myUserService.registerUser(user, RoleEnum.ADMIN);
     }
