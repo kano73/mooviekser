@@ -59,4 +59,15 @@ public class MyCommentResponse {
     public void setDate(LocalDateTime date) {
         this.date = date;
     }
+
+    @Override
+    public String toString() {
+        return "MyCommentResponse{" +
+                "id=" + id +
+                ", text='" + text + '\'' +
+                ", authorName='" + authorName + '\'' +
+                ", authorId=" + authorId +
+                ", date=" + date +
+                '}';
+    }
 }

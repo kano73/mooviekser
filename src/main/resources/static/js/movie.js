@@ -9,6 +9,7 @@ document.addEventListener("DOMContentLoaded", function () {
             .then(data => {
                 if (data && data.length > 0) {
                     displayComments(data);
+                    console.log(data);
                 } else {
                     commentsContainer.innerHTML = "<p>No comments available.</p>";
                 }
@@ -26,7 +27,7 @@ document.addEventListener("DOMContentLoaded", function () {
             commentDiv.classList.add('comment');
             commentDiv.innerHTML = `
                 <p><strong>${comment.authorName}</strong>: ${comment.text}</p>
-                <em>${new Date(comment.date[0], comment.date[1] - 1, comment.date[2], comment.date[3], comment.date[4], comment.date[5], comment.date[6]).toLocaleString()}</em>
+                <em>${comment.date[0]}/${comment.date[1]}/${comment.date[2]}, ${comment.date[3]}:${comment.date[4]}:${comment.date[5]}</em>
                 <button data-comment-id="${comment.id}" class="btnDltComment">Delete this comment</button>
             `;
             if (comment.authorId === usersId) {

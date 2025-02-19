@@ -39,7 +39,6 @@ public class MyRatingService {
                 .orElse(null);
 
         if(oldRating != null) {
-            System.out.println("deleting");
             myRatingRepository.deleteByAuthor_IdAndMovie_Id(user.getId(), movie.getId());
             adjustRatingUpdate(movie, rateDto, oldRating);
         }else{
