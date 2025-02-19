@@ -49,13 +49,4 @@ public class FavoriteService {
         favoriteRepository.deleteByUserAndMovie(user, movie);
         return true;
     }
-
-    public List<MyMovie> getAllFavoriteMoviesForUser(int page ) {
-        MyUser user = auth.getCurrentUserAuthenticated();
-        if (page<1){
-            page = 1;
-        }
-        return favoriteRepository.findAllByUser(user, PageRequest.of(page,25)).stream()
-                .map(Favorite::getMovie).collect(Collectors.toList());
-    }
 }
